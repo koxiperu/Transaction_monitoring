@@ -35,7 +35,7 @@ class TransactionData(pd.DataFrame):
         return "No column with date-time type"
 
     # Show seasonal change of total order values
-    def tr_activity(self):
+    def plot_tr_activity(self):
         # Copy dataframe
         df_self = self.copy()
         # Add columns with month number and month name from date-time
@@ -119,7 +119,7 @@ class TransactionData(pd.DataFrame):
         return susp_all[["user_id", "created_at", "order_id", "order_amount"]]
 
     # Turnover of the fund with isin.
-    def fund_turnover(self, isin):
+    def plot_fund_turnover(self, isin):
         df_self = self.copy()
         # Sorting values by date
         df_self = df_self.sort_values(by=["created_at"]).reset_index()
@@ -134,7 +134,7 @@ class TransactionData(pd.DataFrame):
         return plt.show()
 
     # Downtime of each transaction depending of time
-    def show_activity_increase(self, k):
+    def plot_activity_increase(self, k):
         df_self = self.copy()
         # Sort transactions by time and user to find suspicious high of frequency among the same user
         df_self = df_self.sort_values(by=["created_at"]).reset_index()
@@ -198,7 +198,7 @@ class TransactionData(pd.DataFrame):
         return susp_all
 
     # Dependence of the number of suspicious transactions on the deviation factor
-    def dev_factor_act_increase(self):
+    def plot_dev_factor_act_increase(self):
         # Do the same: sort by date, calculate downtime (time difference between current and previous transaction), change all Nan on 0, take only positive downtimes
         df_self = self.copy()
         df_self = df_self.sort_values(by=["created_at"]).reset_index()
@@ -227,7 +227,7 @@ class TransactionData(pd.DataFrame):
         return plt.show()
 
     # Dependence of total order amount on time
-    def show_order_amount(self, k):
+    def plot_order_amount(self, k):
         dset = self.copy()
         # Find average and deviation range in order amount
         avg = dset["order_amount"].mean()
@@ -264,7 +264,7 @@ class TransactionData(pd.DataFrame):
         return df_susp[["created_at", "user_id", "order_id", "order_amount"]]
 
     # # Dependence of the number of suspicious transactions on the deviation factor
-    def dev_factor_order_amount(self):
+    def plot_dev_factor_order_amount(self):
         df_self = self.copy()
         avg = df_self["order_amount"].mean()
         factors = [i * 0.01 for i in range(400)]
@@ -284,7 +284,7 @@ class TransactionData(pd.DataFrame):
         return plt.show()
 
     # For one user find his dependence of order amount on time
-    def show_user_order_amount(self, user, k):
+    def plot_user_order_amount(self, user, k):
         df_self = self.copy()
         # Filter only one user
         df_user = df_self[df_self["user_id"] == user].reset_index()
@@ -357,7 +357,7 @@ class TransactionData(pd.DataFrame):
             return df_susp
 
     # Frequency of transactions for one user
-    def show_activity_increase_user(self, user, k):
+    def plot_activity_increase_user(self, user, k):
         df_self = self.make_df()
         df_activ = (
             df_self[df_self["time_diff"] > 0]
