@@ -22,9 +22,15 @@ class TransactionData(pd.DataFrame):
         # Extract the set of column names from the DataFrame
         set_col_file = set(df.columns)
         # Check if the columns match the expected set of column names
-        if set_col == set_col_file:
-            return cls(df)
-        return print("Columns defined incorrectly.")
+        try:
+            if set_col == set_col_file:
+                return cls(df)
+        except:
+            print("Columns defined incorrectly.")
+        else:
+            print("Columns defined correctly.")
+        finally:
+            return print("TransactionData object created successfully.")
 
     # Check if there exists rows with future transactions in date-time column.
     def get_future_transactions(self):
