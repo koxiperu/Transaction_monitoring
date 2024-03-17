@@ -1,12 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
+# Subclass of pd.DataFrame for handling transaction data
 class TransactionData(pd.DataFrame):
-    #
+    # Class method to parse CSV file and create TransactionData object
     @classmethod
     def parse_csv(cls, file_path):
         df = pd.read_csv(file_path, parse_dates=["created_at"])
+        # Define the set of expected column names
         set_col = set(
             [
                 "user_id",
@@ -18,7 +19,9 @@ class TransactionData(pd.DataFrame):
                 "unit_price",
             ]
         )
+        # Extract the set of column names from the DataFrame
         set_col_file = set(df.columns)
+        # Check if the columns match the expected set of column names
         if set_col == set_col_file:
             return cls(df)
         return print("Columns defined incorrectly.")
