@@ -6,31 +6,37 @@ class TransactionData(pd.DataFrame):
     # Class method to parse CSV file and create TransactionData object
     @classmethod
     def parse_csv(cls, file_path):
-        df = pd.read_csv(file_path, parse_dates=["created_at"])
-        # Define the set of expected column names
-        set_col = set(
-            [
-                "user_id",
-                "created_at",
-                "order_type",
-                "order_id",
-                "isin",
-                "quantity",
-                "unit_price",
-            ]
-        )
-        # Extract the set of column names from the DataFrame
-        set_col_file = set(df.columns)
-        # Check if the columns match the expected set of column names
         try:
-            if set_col == set_col_file:
-                return cls(df)
+            df = pd.read_csv(file_path, parse_dates=["created_at"])
         except:
-            print("Columns defined incorrectly.")
+            print("File not found.")
+            return None
         else:
-            print("Columns defined correctly.")
-        finally:
-            return print("TransactionData object created successfully.")
+            # Check if it contains NaN values
+            if df.isna().any().any():
+                print("DataFrame contains NaN values.")
+                return None
+
+            # Define the set of expected column names
+            set_col = set(
+                [
+                    "user_id",
+                    "created_at",
+                    "order_type",
+                    "order_id",
+                    "isin",
+                    "quantity",
+                    "unit_price",
+                ]
+            )
+            # Extract the set of column names from the DataFrame
+            set_col_file = set(df.columns)
+            # Check if the columns match the expected set of column names
+            if set_col == set_col_file:
+                print("DransactionData object was created successfully.")
+                return cls(df)
+            else:
+                return print("File contains unexpected columns")
 
     # Check if there exists rows with future transactions in date-time column.
     def get_future_transactions(self):
